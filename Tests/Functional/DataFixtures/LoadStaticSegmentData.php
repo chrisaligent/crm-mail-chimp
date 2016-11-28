@@ -50,9 +50,6 @@ class LoadStaticSegmentData extends AbstractMailChimpFixture implements Dependen
      */
     public function getDependencies()
     {
-        return [
-            __NAMESPACE__ . '\LoadMarketingListData',
-            __NAMESPACE__ . '\LoadSubscribersListData'
-        ];
+        return [LoadMarketingListData::class, LoadSubscribersListData::class];
     }
 }

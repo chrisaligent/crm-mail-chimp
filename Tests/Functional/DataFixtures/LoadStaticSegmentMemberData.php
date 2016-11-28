@@ -47,8 +47,6 @@ class LoadStaticSegmentMemberData extends AbstractMailChimpFixture implements De
      */
     public function getDependencies()
     {
-        return [
-            __NAMESPACE__ . '\LoadMemberExportData',
-        ];
+        return [LoadMemberExportData::class];
     }
 }
