@@ -2,13 +2,14 @@
 
 namespace Oro\Bundle\MailChimpBundle\Provider\Transport\Iterator;
 
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
-
+use Doctrine\ORM\QueryBuilder;
+use Oro\Bundle\ImportExportBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MailChimpBundle\Entity\StaticSegment;
+use Oro\Bundle\MailChimpBundle\Model\FieldHelper;
 use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 use Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
-use Oro\Bundle\MailChimpBundle\Model\FieldHelper;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 abstract class AbstractStaticSegmentMembersIterator extends AbstractStaticSegmentIterator
 {
@@ -63,14 +64,19 @@ abstract class AbstractStaticSegmentMembersIterator extends AbstractStaticSegmen
     /**
      * @param StaticSegment $staticSegment
      * @param QueryBuilder $qb
+     * @throws InvalidConfigurationException
      */
     protected function matchMembersByEmail(StaticSegment $staticSegment, QueryBuilder $qb)
     {
         $marketingList = $staticSegment->getMarketingList();
         $contactInformationFields = $this->getContactInformationFields($marketingList);
+        if (!count($contactInformationFields)) {
+            throw new InvalidConfigurationException('Marketing List must contain at least one email field');
+        }
 
         $expr = $qb->expr()->orX();
         foreach ($contactInformationFields as $contactInformationField) {
+            QueryBuilderUtil::checkIdentifier($contactInformationField);
             $contactInformationFieldExpr = $this->fieldHelper
                 ->getFieldExpr($marketingList->getEntity(), $qb, $contactInformationField);
 

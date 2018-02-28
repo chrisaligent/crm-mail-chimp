@@ -2,17 +2,16 @@
 
 namespace Oro\Bundle\MailChimpBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
+use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Response;
-
+use Oro\Bundle\MailChimpBundle\Entity\StaticSegment;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-use Oro\Bundle\MailChimpBundle\Entity\StaticSegment;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Rest\RouteResource("staticsegment")
@@ -55,12 +54,13 @@ class StaticSegmentController extends RestController implements ClassResourceInt
      *      resource=false
      * )
      * @AclAncestor("oro_mailchimp")
+     * @param Request $request
      * @param StaticSegment $staticSegment
      * @return Response
      */
-    public function updateStatusAction(StaticSegment $staticSegment)
+    public function updateStatusAction(Request $request, StaticSegment $staticSegment)
     {
-        $status = $this->getRequest()->get('status');
+        $status = $request->get('status');
         $staticSegment->setSyncStatus($status);
 
         $em = $this->getDoctrine()->getManager();

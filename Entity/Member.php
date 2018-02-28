@@ -5,7 +5,6 @@ namespace Oro\Bundle\MailChimpBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
@@ -339,6 +338,7 @@ class Member implements OriginAwareInterface, FirstNameInterface, LastNameInterf
     public function __construct()
     {
         $this->segments = new ArrayCollection();
+        $this->segmentMembers = new ArrayCollection();
     }
 
     /**

@@ -3,10 +3,10 @@
 namespace Oro\Bundle\MailChimpBundle\Provider\Transport\Iterator;
 
 use Doctrine\ORM\AbstractQuery;
-
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\MailChimpBundle\Entity\ExtendedMergeVar;
+use Oro\Bundle\MailChimpBundle\Entity\StaticSegment;
 use Oro\Bundle\MailChimpBundle\Model\ExtendedMergeVar\ProviderInterface;
 
 class ExtendedMergeVarRemoveIterator extends AbstractSubordinateIterator
@@ -54,10 +54,14 @@ class ExtendedMergeVarRemoveIterator extends AbstractSubordinateIterator
     }
 
     /**
+     * @param StaticSegment $staticSegment
      * {@inheritdoc}
      */
     protected function createSubordinateIterator($staticSegment)
     {
+        if (!$staticSegment instanceof StaticSegment) {
+            return new \ArrayIterator();
+        }
         $vars = $this->provider->provideExtendedMergeVars($staticSegment->getMarketingList());
 
         $varNames = array_map(
