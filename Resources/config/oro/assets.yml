@@ -1,4 +1,3 @@
-assets:
-    css:
-      'oromailchimp':
-          - 'bundles/oromailchimp/css/styles.css'
+css:
+    inputs:
+        - 'bundles/oromailchimp/css/styles.css'
